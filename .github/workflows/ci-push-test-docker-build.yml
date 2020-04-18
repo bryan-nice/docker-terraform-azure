@@ -63,7 +63,7 @@ jobs:
             The commit SHA is: ${{ github.sha }}
             Git Actions Log URL: ${{ steps.job_info.outputs.html_url }}
           SLACK_USERNAME: docker-terraform-azure
-          SLACK_WEBHOOK: ${{ secrets.SLACK_NOTIFICATION }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_REF: ${{ github.ref }}
