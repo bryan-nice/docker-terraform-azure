@@ -12,15 +12,8 @@ jobs:
       - uses: actions/checkout@v1
       - name: Check if there are conflicts when local merging master
         id: local_merge_master
-        run: git merge o1rigin/master
-      - name: Build Terraform Docker Image
-        id: build_terraform_docker_image
-        run: |
-          make \
-            STEP_1_IMAGE="golang:1.14.1-alpine3.11" \
-            STEP_2_IMAGE="alpine:3.11" \
-            TERRAFORM_VERSION=0.12.20 \
-            docker-build
+        run: git merge origin/master
+
       - name: Get Build Informaiton
         if: always()
         id: build_info
@@ -55,7 +48,7 @@ jobs:
       - name: Slack Notification
         id: slack_notification
         uses: bryan-nice/slack-notification@1.0.2
-        if: contains(steps.job_info.outputs.status, 'failure')
+        #if: contains(steps.job_info.outputs.status, 'failure')
         env:
           SLACK_CHANNEL: ci-cd-dev
           SLACK_COLOR: '#3278BD'
