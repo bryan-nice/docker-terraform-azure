@@ -18,45 +18,29 @@ jobs:
             STEP_2_IMAGE="alpine:3.11" \
             TERRAFORM_VERSION=0.12.20 \
             docker-build
-      - name: Get Build Informaiton
-        if: always()
-        id: build_info
-        run: |
-          branch_name=${GITHUB_REF##*/}
-          echo '{"github_repository":"'${GITHUB_REPOSITORY}'","branch_name":"'${branch_name}'"}' >> build_info.json 2>&1
-      - name: Persisting Variables
-        id: persisting_log
-        if: always()
-        uses: actions/upload-artifact@v1
-        with:
-          name: build_info
-          path: build_info.json
-  logPushCiBuildDockerImage:
-    needs: pushCiBuildDockerImage
+  logPullCdBuildDockerImage:
+    needs: pullCdBuildDockerImage
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Get Build Job Info From FIle
-        uses: actions/download-artifact@v1
-        with:
-          name: build_info
       - name: Set Variables With Build Info
         id: job_info
         run: |
-          curl -v -L -u runner:${{ secrets.GITHUB_TOKEN }} -o job_info.json https://api.github.com/repos/$(cat build_info/build_info.json | jq --raw-output '.github_repository')/actions/runs/${{ github.run_id }}/jobs
+          curl -v -L -u runner:${{ secrets.GITHUB_TOKEN }} -o job_info.json https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${{ github.run_id }}/jobs
           echo ::set-output name=log_url::$(cat job_info.json | jq --raw-output '.jobs | .[0] | .url')
           echo ::set-output name=html_url::$(cat job_info.json | jq --raw-output '.jobs | .[0] | .html_url')
-          echo ::set-output name=branch_name::$(cat build_info/build_info.json | jq --raw-output '.branch_name')
+          echo ::set-output name=branch_name::$(echo ${GITHUB_REF##*/})
+          echo ::set-output name=repo_name::$(echo ${GITHUB_REPOSITORY##*/})
       - name: Generate log file
         run: curl -v -L -u runner:${{ secrets.GITHUB_TOKEN }} -o build_logs.txt ${{ steps.job_info.outputs.log_url }}/logs
       - name: Slack Notification
         id: slack_notification
-        uses: bryan-nice/slack-notification@1.0.0
+        uses: bryan-nice/slack-notification@1.0.2
         if: contains(steps.job_info.outputs.status, 'failure')
         env:
-          SLACK_CHANNEL: ci-cd-dev
+          SLACK_CHANNEL: ${{ steps.job_info.outputs.repo_name }}
           SLACK_COLOR: '#3278BD'
-          SLACK_TITLE: 'FAULRE: docker-terraform-azure docker image build failed on commit sha ${{ github.sha }}'
+          SLACK_TITLE: 'FAULRE: ${{ steps.job_info.outputs.repo_name }} docker image build failed on commit sha ${{ github.sha }}'
           SLACK_MESSAGE: |
             OS: alpine:3.11
             Branch Name: ${{ steps.job_info.outputs.branch_name }}

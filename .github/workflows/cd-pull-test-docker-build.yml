@@ -13,36 +13,19 @@ jobs:
       - name: Check if there are conflicts when local merging master
         id: local_merge_master
         run: git merge origin/master
-#      - name: Build Terraform Docker Image
-#        id: build_terraform_docker_image
-#        run: |
-#          make \
-#            STEP_1_IMAGE="golang:1.14.1-alpine3.11" \
-#            STEP_2_IMAGE="alpine:3.11" \
-#            TERRAFORM_VERSION=0.12.20 \
-#            docker-build
-      - name: Get Build Informaiton
-        if: always()
-        id: build_info
+      - name: Build Terraform Docker Image
+        id: build_terraform_docker_image
         run: |
-          branch_name=${GITHUB_REF##*/}
-          echo '{"branch_name":"'${branch_name}'"}' >> build_info.json 2>&1
-      - name: Persisting Variables
-        id: persisting_log
-        if: always()
-        uses: actions/upload-artifact@v1
-        with:
-          name: build_info
-          path: build_info.json
+          make \
+            STEP_1_IMAGE="golang:1.14.1-alpine3.11" \
+            STEP_2_IMAGE="alpine:3.11" \
+            TERRAFORM_VERSION=0.12.20 \
+            docker-build
   logPullCdBuildDockerImage:
     needs: pullCdBuildDockerImage
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Get Build Job Info From FIle
-        uses: actions/download-artifact@v1
-        with:
-          name: build_info
       - name: Set Variables With Build Info
         id: job_info
         run: |
@@ -56,7 +39,7 @@ jobs:
       - name: Slack Notification
         id: slack_notification
         uses: bryan-nice/slack-notification@1.0.2
-        #if: contains(steps.job_info.outputs.status, 'failure')
+        if: contains(steps.job_info.outputs.status, 'failure')
         env:
           SLACK_CHANNEL: ${{ steps.job_info.outputs.repo_name }}
           SLACK_COLOR: '#3278BD'
