@@ -57,7 +57,7 @@ jobs:
         uses: bryan-nice/slack-notification@1.0.2
         #if: contains(steps.job_info.outputs.status, 'failure')
         env:
-          SLACK_CHANNEL: ${GITHUB_REPOSITORY##*/}
+          SLACK_CHANNEL: docker-terraform-azure
           SLACK_COLOR: '#3278BD'
           SLACK_TITLE: 'FAULRE: ${GITHUB_REPOSITORY##*/} docker image build failed on commit sha ${{ github.sha }}'
           SLACK_MESSAGE: |
