@@ -13,7 +13,14 @@ jobs:
       - name: Check if there are conflicts when local merging master
         id: local_merge_master
         run: git merge origin/master
-
+#      - name: Build Terraform Docker Image
+#        id: build_terraform_docker_image
+#        run: |
+#          make \
+#            STEP_1_IMAGE="golang:1.14.1-alpine3.11" \
+#            STEP_2_IMAGE="alpine:3.11" \
+#            TERRAFORM_VERSION=0.12.20 \
+#            docker-build
       - name: Get Build Informaiton
         if: always()
         id: build_info
