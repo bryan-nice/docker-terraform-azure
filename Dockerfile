@@ -47,6 +47,7 @@ ENV BASE_PACKAGES \
     python3
 
 RUN apk --update add --virtual build-dependencies \
+    gettext \
     gcc \
     musl-dev \
     libffi-dev \
