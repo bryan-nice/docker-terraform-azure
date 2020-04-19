@@ -13,14 +13,7 @@ jobs:
       - name: Check if there are conflicts when local merging master
         id: local_merge_master
         run: git merge origin/master
-      - name: Build Terraform Docker Image
-        id: build_terraform_docker_image
-        run: |
-          make \
-            STEP_1_IMAGE="golang:1.14.1-alpine3.11" \
-            STEP_2_IMAGE="alpine:3.11" \
-            TERRAFORM_VERSION=0.12.20 \
-            docker-build
+
       - name: Get Build Informaiton
         if: always()
         id: build_info
@@ -46,7 +39,7 @@ jobs:
       - name: Set Variables With Build Info
         id: job_info
         run: |
-          curl -v -L -u runner:${{ secrets.GITHUB_TOKEN }} -o job_info.json https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${{ github.run_id }}/jobs
+          curl -v -L -u runner:${{ secrets.GITHUB_TOKEN }} -o job_info.json https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs
           echo ::set-output name=log_url::$(cat job_info.json | jq --raw-output '.jobs | .[0] | .url')
           echo ::set-output name=html_url::$(cat job_info.json | jq --raw-output '.jobs | .[0] | .html_url')
           echo ::set-output name=branch_name::$(cat build_info/build_info.json | jq --raw-output '.branch_name')
