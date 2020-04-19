@@ -36,6 +36,8 @@ LABEL Name="bryan-nice/docker-terrraform-azure" \
 COPY --from=STEP_1 /go/bin/terraform /usr/bin/terraform
 
 ENV BASE_PACKAGES \
+    gettext \
+    git \
     bash \
     curl \
     make \
@@ -47,7 +49,6 @@ ENV BASE_PACKAGES \
     python3
 
 RUN apk --update add --virtual build-dependencies \
-    gettext \
     gcc \
     musl-dev \
     libffi-dev \
