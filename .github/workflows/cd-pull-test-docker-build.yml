@@ -32,6 +32,7 @@ jobs:
           curl -v -L -u runner:${{ secrets.GITHUB_TOKEN }} -o job_info.json https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${{ github.run_id }}/jobs
           echo ::set-output name=log_url::$(cat job_info.json | jq --raw-output '.jobs | .[0] | .url')
           echo ::set-output name=html_url::$(cat job_info.json | jq --raw-output '.jobs | .[0] | .html_url')
+          echo ::set-output name=status::$(cat job_info.json | jq --raw-output '.jobs | .[0] | .conclusion')
           echo ::set-output name=branch_name::$(echo ${GITHUB_REF##*/})
           echo ::set-output name=repo_name::$(echo ${GITHUB_REPOSITORY##*/})
       - name: Generate log file
