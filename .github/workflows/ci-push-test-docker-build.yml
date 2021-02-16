@@ -19,7 +19,7 @@ jobs:
             TERRAFORM_VERSION=0.14.6 \
             docker-build
   logPullCiBuildDockerImage:
-    needs: pullCdBuildDockerImage
+    needs: pushCiBuildDockerImage
     if: always()
     runs-on: ubuntu-latest
     steps:
