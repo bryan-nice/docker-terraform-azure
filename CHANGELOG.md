@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.3.0] - 2021-02-15
 
-### Added to 1.3.3
+### Added to 1.3.0
 
 - Upgraded Terraform version 0.14.6
 - Upgraded Alpine version 3.13
