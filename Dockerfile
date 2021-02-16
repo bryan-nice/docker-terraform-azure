@@ -60,7 +60,7 @@ RUN set -x && \
     apk add --no-cache ${BASE_PACKAGES} && \
     python3 -m pip install --upgrade pip && \
     python3 -m pip install \
-        azure-cli \
+        azure-cli && \
     apk del build-dependencies && \
     rm -rf /var/cache/apk/* && \
     rm -rf /usr/bin/python && \
