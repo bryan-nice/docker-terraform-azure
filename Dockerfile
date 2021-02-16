@@ -1,9 +1,9 @@
-ARG STEP_1_IMAGE=golang:1.14.1-alpine3.11
-ARG STEP_2_IMAGE=alpine:3.11
+ARG STEP_1_IMAGE=golang:1.15.8-alpine3.13
+ARG STEP_2_IMAGE=alpine:3.13
 
 FROM ${STEP_1_IMAGE} AS STEP_1
 
-ARG TERRAFORM_VERSION=0.12.20
+ARG TERRAFORM_VERSION=0.14.6
 
 ENV BUILD_PACKAGES \
     bash \
@@ -29,7 +29,7 @@ RUN git clone https://github.com/hashicorp/terraform.git ./ \
 
 FROM ${STEP_2_IMAGE} AS STEP_2
 
-LABEL Name="bryan-nice/docker-terrraform-azure" \
+LABEL Name="bryan-nice/alpine-terrraform-azure" \
       Version="1.0.0"
 
 # Copy from Step 1
