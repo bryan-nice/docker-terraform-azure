@@ -18,7 +18,7 @@ jobs:
             STEP_2_IMAGE="alpine:3.13" \
             TERRAFORM_VERSION=0.14.6 \
             docker-build
-  logPullCdBuildDockerImage:
+  logPullCiBuildDockerImage:
     needs: pullCdBuildDockerImage
     if: always()
     runs-on: ubuntu-latest
