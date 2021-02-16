@@ -17,8 +17,8 @@ RESET :=$(shell tput sgr0)
 # -----------------------------------------------------------------------------
 
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
-GIT_REPOSITORY_NAME := $(shell git config --get remote.origin.url | cut -d'/' -f5 | cut -d'.' -f1)
-GIT_ACCOUNT_NAME := $(shell git config --get remote.origin.url | cut -d'/' -f4)
+GIT_REPOSITORY_NAME := $(shell git config --get remote.origin.url | rev | cut -d"." -f2 | cut -d"/" -f1 | rev )
+GIT_ACCOUNT_NAME := $(shell git config --get remote.origin.url | rev | cut -d"." -f2 | cut -d"/" -f2 | cut -d":" -f1 | rev)
 GIT_SHA := $(shell git log --pretty=format:'%H' -n 1)
 GIT_TAG ?= $(shell git describe --always --tags | awk -F "-" '{print $$1}')
 GIT_TAG_END ?= HEAD
@@ -29,8 +29,8 @@ GIT_VERSION_LONG := $(shell git describe --always --tags --long --dirty)
 # Docker Variables
 # -----------------------------------------------------------------------------
 
-STEP_1_IMAGE ?= golang:1.14.1-alpine3.11
-STEP_2_IMAGE ?= alpine:3.11
+STEP_1_IMAGE ?= golang:1.15.8-alpine3.13
+STEP_2_IMAGE ?= alpine:3.13
 DOCKER_IMAGE_PACKAGE := $(GIT_REPOSITORY_NAME)-package:$(GIT_VERSION)
 DOCKER_IMAGE_TAG ?= $(GIT_REPOSITORY_NAME):$(GIT_VERSION)
 DOCKER_IMAGE_NAME := $(GIT_REPOSITORY_NAME)
@@ -39,7 +39,7 @@ DOCKER_IMAGE_NAME := $(GIT_REPOSITORY_NAME)
 # Terraform Varibles
 # -----------------------------------------------------------------------------
 
-TERRAFORM_VERSION ?= 0.12.20
+TERRAFORM_VERSION ?= 0.14.6
 
 # -----------------------------------------------------------------------------
 # FUNCTIONS
