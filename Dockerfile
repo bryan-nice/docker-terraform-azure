@@ -55,16 +55,16 @@ RUN apk --update add --virtual build-dependencies \
     openssl-dev \
     python3-dev
 
-RUN set -x \
- && apk update && apk upgrade \
- && apk add --no-cache ${BASE_PACKAGES} \
- && python3 -m pip install --upgrade pip \
- && python3 -m pip install \
+RUN set -x && \
+    apk update && apk upgrade && \
+    apk add --no-cache ${BASE_PACKAGES} && \
+    python3 -m pip install --upgrade pip && \
+    python3 -m pip install \
         azure-cli \
- && apk del build-dependencies \
- && rm -rf /var/cache/apk/* \
- && rm /usr/bin/python \
- && ln -s /usr/bin/python3 /usr/bin/python
+    apk del build-dependencies && \
+    rm -rf /var/cache/apk/* && \
+    rm -rf /usr/bin/python && \
+    ln -s /usr/bin/python3 /usr/bin/python
 
 # Create Terraform User
 RUN addgroup -S terraform && adduser -S terraform -G terraform
